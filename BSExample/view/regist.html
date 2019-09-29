@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>注册</title>
+        <script type="text/javascript" src="../resources/jquery-3.3.1/jquery-3.3.1.js"></script>
+    </head>
+
+    <body>
+        <form action="../service/RegistService.php" method="get" id="RegistForm">
+            用户名: <input id="username" type="text" name="username" value="" /><br>
+            密码: <input id="password" type="password" name="password" value=""/><br>
+            确认密码: <input id="password2" type="password" name="password2" value=""/><p id="msg" style="display: inline"></p><br>
+            <input type="button" value="注册" id="btn" /> <br>
+            <p id="message"></p>
+        </form>
+    </body>
+    <script>
+
+        var submit =document.getElementById("btn");
+        submit.onclick=function () {
+
+            var p = document.getElementById("message");
+            p.innerText="";
+
+            var username=$("#username").val();
+            var password=$("#password").val();
+            var password2=$("#password2").val();
+            if(password==""||password2==""||username==""){
+                alert("请填写完整信息");
+                return;
+            }else{
+                var p = document.getElementById("msg");
+                p.innerText="";
+                if(password!=password2){
+                    p.innerHTML="<p  style=\"font-size:20px;color:red\">两次输入的密码不一致</p>";
+                    return;
+                }
+            }
+            var ajax=null;
+            //创建Ajax对象
+            if(window.XMLHttpRequest)
+                ajax = new XMLHttpRequest();//在主流浏览器下创建Ajax对象
+            else
+                ajax = new ActiveXObject("Microsoft.xmlhttp");//在IE浏览器下创建Ajax对象
+            //开启ajax(get)
+            var url = "http://localhost:8081/PhpStormProject/BSExample/service/RegistService.php?username="+username+"&password="+password;
+            ajax.open("GET",url,true);
+            //发送数据(请求)
+            ajax.send();
+            //等待接收数据
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4){
+                    if(ajax.status >= 200 && ajax.status < 300 || ajax.status == 304){
+                        if(ajax.responseText=="false")
+                            p.innerHTML="<p  style=\"font-size:20px;color:red\">注册失败，该用户名已存在</p>";
+                        else {
+                            p.innerHTML = "<p  style=\"font-size:20px;color:green\">注册成功，即将跳转到登录界面...</p>";
+                            window.setTimeout("window.location.assign('login.html')", 3000);
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</html>

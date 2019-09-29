@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script type="text/javascript" src="../resources/jquery-3.3.1/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <form action="../service/LoginService.php" id="loginForm" method="get" onsubmit="return ReceiveData() ">
+        用户名: <input id="username" type="text" name="username" value="" /><br>
+        密码: <input id="password" type="password" name="password" value=""/><br>
+        <input type="button" value="登录" id="btn"/>
+        <p id="message"></p>
+    </form>
+</body>
+<script>
+
+    var submit =document.getElementById("btn");
+    submit.onclick=function () {
+        var p = document.getElementById("message");
+        p.innerHTML="";
+
+        var username=$("#username").val();
+        var password=$("#password").val();
+
+        if(username==""||password==""){
+            alert("请填写完整信息");
+            return;
+        }
+        var ajax=null;
+        //创建Ajax对象
+        if(window.XMLHttpRequest)
+            ajax = new XMLHttpRequest();//在主流浏览器下创建Ajax对象
+        else
+            ajax = new ActiveXObject("Microsoft.xmlhttp");//在IE浏览器下创建Ajax对象
+        //开启ajax(get)
+        var url = "http://localhost:8081/PhpStormProject/BSExample/service/LoginService.php?username="+username+"&password="+password;
+        ajax.open("GET",url,true);
+        //发送数据(请求)
+        ajax.send();
+        //等待接收数据
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4){
+                if(ajax.status >= 200 && ajax.status < 300 || ajax.status == 304){
+
+                    if(ajax.responseText=="false")
+                        p.innerHTML="<p  style=\"font-size:20px;color:red\">登录失败，请检查用户名和密码是否正确</p>";
+                    else {
+                        p.innerHTML = "<p  style=\"font-size:20px;color:green\">登录成功，即将跳转到首页...</p>";
+                        window.setTimeout("window.location.assign('index.html')", 3000);
+                    }
+                }
+            }
+        }
+    }
+</script>
+</html>
