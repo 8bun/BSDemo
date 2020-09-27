@@ -1,2 +1,2 @@
-# BSExample
-PHP语言编写，与数据库交互的登录注册小Example，体现B/S三层结构
+# BSDemo
+BSDemo是使用PHP编写BS结构小Demo，初入PHP坑时写的
